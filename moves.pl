@@ -17,12 +17,16 @@ direction(0, 1).
 % valid_move(+State, +Player, -Move)
 valid_move(state(Board, Player, _, _), Player, move(R1, C1, R2, C2)) :-
     owns(Player, TargetPiece),
-    between(0, 10, R1),
-    between(0, 10, C1),
-    get_cell(Board, R1, C1, TargetPiece),
+    find_piece(Board, TargetPiece, R1, C1),
     direction(DR, DC),
     slide(Board, TargetPiece, R1, C1, DR, DC, R2, C2),
     \+ is_suicide_move(Board, Player, TargetPiece, R2, C2).
+
+% find_piece(+Board, +Piece, -R, -C)
+find_piece(Board, Piece, R, C) :-
+    nth0(Index, Board, Piece),
+    R is Index // 11,
+    C is Index mod 11.
 
 is_suicide_move(Board, Player, Piece, R, C) :-
     Piece \= king,

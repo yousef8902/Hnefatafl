@@ -28,15 +28,15 @@ captures_in_dir(Board, Player, R, C, DR, DC, CapR, CapC) :-
     get_cell(Board, OppR, OppC, AnvilPiece),
     is_anvil(Player, AnvilPiece, OppR, OppC).
 
-% Attacker anvils: another attacker, corner, or throne.
+% Attacker anvils: another attacker, or an empty corner/throne.
 is_anvil(attacker, Piece, _, _) :- Piece == attacker.
-is_anvil(attacker, _, R, C) :- corner(R, C).
-is_anvil(attacker, _, R, C) :- throne(R, C).
+is_anvil(attacker, empty, R, C) :- corner(R, C).
+is_anvil(attacker, empty, R, C) :- throne(R, C).
 
-% Defender anvils: another defender, corner, or throne. King is NOT an anvil.
+% Defender anvils: another defender, or an empty corner/throne. King is not an anvil.
 is_anvil(defender, Piece, _, _) :- Piece == defender.
-is_anvil(defender, _, R, C) :- corner(R, C).
-is_anvil(defender, _, R, C) :- throne(R, C).
+is_anvil(defender, empty, R, C) :- corner(R, C).
+is_anvil(defender, empty, R, C) :- throne(R, C).
 
 % check_winner(+State, -Winner)
 check_winner(state(Board, _, _, _), defender) :-
@@ -72,5 +72,4 @@ hostile_to_king(Board, R, C) :-
     ; \+ between(0, 10, C) % Wall (out of bounds)
     ; get_cell(Board, R, C, attacker)
     ; corner(R, C)
-    ; throne(R, C)
     ), !.
