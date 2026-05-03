@@ -25,13 +25,13 @@ An implementation of the strategy game Hnefatafl, built as part of the CS361 Art
 ## Install
 From the repository root:
 ```
-C:/Users/ASUS/AppData/Local/Programs/Python/Python312/python.exe -m pip install pygame
+python.exe -m pip install pygame
 ```
 
 ## Run
 From the repository root:
 ```
-C:/Users/ASUS/AppData/Local/Programs/Python/Python312/python.exe -m hnefatafl.main
+python.exe -m hnefatafl.main
 ```
 
 If `swipl` is not in PATH, install SWI-Prolog and add it to PATH. The GUI launches Prolog using:
