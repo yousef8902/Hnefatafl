@@ -145,6 +145,33 @@ cell_symbol(R, C, empty, 'C') :- corner(R, C), !.   % corner marker
 cell_symbol(R, C, empty, 'T') :- throne(R, C), !.   % throne marker at center
 cell_symbol(_, _, empty, ' ').
 
+% Python-friendly board printing (11 lines, comma-separated)
+% a = attacker, d = defender, k = king, e = empty
+print_board_python(Board) :-
+    print_python_rows(Board, 0).
+
+print_python_rows(_, 11) :- !.
+print_python_rows(Board, Row) :-
+    Row < 11,
+    print_python_cols(Board, Row, 0),
+    nl,
+    Row1 is Row + 1,
+    print_python_rows(Board, Row1).
+
+print_python_cols(_, _, 11) :- !.
+print_python_cols(Board, Row, Col) :-
+    Col < 11,
+    get_cell(Board, Row, Col, Cell),
+    python_cell_symbol(Cell, Symbol),
+    ( Col == 0 -> write(Symbol) ; format(',~w', [Symbol]) ),
+    Col1 is Col + 1,
+    print_python_cols(Board, Row, Col1).
+
+python_cell_symbol(attacker, 'a') :- !.
+python_cell_symbol(defender, 'd') :- !.
+python_cell_symbol(king, 'k') :- !.
+python_cell_symbol(_, 'e').
+
 %  Run: initialize and print (for testing)
 
 run :-
