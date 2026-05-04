@@ -1,12 +1,15 @@
+:- set_prolog_flag(stack_limit, 4_294_967_296).
+
 :- ensure_loaded('board.pl').
 :- ensure_loaded('moves.pl').
 :- ensure_loaded('capture.pl').
 :- ensure_loaded('alphabeta.pl').
 
 % Difficulty mapping: Easy = 1, Medium = 3, Hard = 5
-set_difficulty(1, 1). 
-set_difficulty(2, 3). 
-set_difficulty(3, 5). 
+% With iterative deepening + TT + move ordering, depth 5 is now feasible.
+set_difficulty(1, 1).
+set_difficulty(2, 3).
+set_difficulty(3, 5).
 
 start :-
     write('--- HNEFATAFL: Viking Chess ---'), nl,
@@ -93,9 +96,9 @@ human_turn(State, Player, NextState) :-
 
 ai_turn(State, AI, Depth, NextState) :-
     write('Computer is calculating the best move...'), nl,
-    alphabeta(State, Depth, -100000, 100000, AI, BestMove, _Score),
-    ( BestMove == none -> 
-        % Fallback if AI gets completely trapped before end-state registers
+    % Use iterative deepening for smarter, faster search
+    alphabeta_id(State, Depth, AI, BestMove, _Score),
+    ( BestMove == none ->
         write('Computer has no valid moves. Human wins!'), nl, abort
     ;
         BestMove = move(R1, C1, R2, C2),
