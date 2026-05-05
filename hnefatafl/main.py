@@ -37,7 +37,9 @@ def main():
     clock = pygame.time.Clock()
 
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    prolog_file = os.path.normpath(os.path.join(base_dir, "..", "controller.pl"))
+    gui_bridge = os.path.normpath(os.path.join(base_dir, "..", "gui_bridge.pl"))
+    default_controller = os.path.normpath(os.path.join(base_dir, "..", "controller.pl"))
+    prolog_file = gui_bridge if os.path.exists(gui_bridge) else default_controller
 
     renderer = Renderer()
     controller = GameController(prolog_file)
