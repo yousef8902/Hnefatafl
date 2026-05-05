@@ -41,10 +41,10 @@ class Renderer:
             b = int(COLOR_BG_TOP[2] * (1 - blend) + COLOR_BG_BOTTOM[2] * blend)
             pygame.draw.line(screen, (r, g, b), (0, y), (SCREEN_WIDTH, y))
 
-    def draw_start_screen(self, screen, buttons):
+    def draw_menu_screen(self, screen, title_text, subtitle_text, buttons):
         self.draw_background(screen)
-        title = self.title_font.render("Hnefatafl", True, COLOR_TEXT)
-        subtitle = self.ui_font.render("Choose difficulty", True, COLOR_TEXT)
+        title = self.title_font.render(title_text, True, COLOR_TEXT)
+        subtitle = self.ui_font.render(subtitle_text, True, COLOR_TEXT)
         screen.blit(title, (SCREEN_WIDTH // 2 - title.get_width() // 2, 90))
         screen.blit(subtitle, (SCREEN_WIDTH // 2 - subtitle.get_width() // 2, 150))
 
@@ -55,6 +55,36 @@ class Renderer:
                 text,
                 (rect.centerx - text.get_width() // 2, rect.centery - text.get_height() // 2),
             )
+
+    def draw_combined_menu(self, screen, title_text, subtitle_text, groups, start_button, start_enabled):
+        self.draw_background(screen)
+        title = self.title_font.render(title_text, True, COLOR_TEXT)
+        subtitle = self.ui_font.render(subtitle_text, True, COLOR_TEXT)
+        screen.blit(title, (SCREEN_WIDTH // 2 - title.get_width() // 2, 70))
+        screen.blit(subtitle, (SCREEN_WIDTH // 2 - subtitle.get_width() // 2, 125))
+
+        for group in groups:
+            heading = self.ui_font.render(group["heading"], True, COLOR_TEXT)
+            screen.blit(heading, (SCREEN_WIDTH // 2 - heading.get_width() // 2, group["heading_y"]))
+
+            for label, rect in group["buttons"].items():
+                pygame.draw.rect(screen, COLOR_PANEL, rect, border_radius=8)
+                if group.get("selected") == label:
+                    pygame.draw.rect(screen, COLOR_SELECT, rect, 3, border_radius=8)
+                text = self.ui_font.render(label, True, COLOR_TEXT)
+                screen.blit(
+                    text,
+                    (rect.centerx - text.get_width() // 2, rect.centery - text.get_height() // 2),
+                )
+
+        pygame.draw.rect(screen, COLOR_PANEL, start_button, border_radius=10)
+        if start_enabled:
+            pygame.draw.rect(screen, COLOR_SELECT, start_button, 3, border_radius=10)
+        label = self.ui_font.render("Start", True, COLOR_TEXT)
+        screen.blit(
+            label,
+            (start_button.centerx - label.get_width() // 2, start_button.centery - label.get_height() // 2),
+        )
 
     def draw_board(self, screen, board, selected, valid_moves):
         origin_x, origin_y = BOARD_ORIGIN
