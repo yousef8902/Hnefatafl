@@ -295,13 +295,13 @@ class Renderer:
             (SCREEN_WIDTH // 2 - text.get_width() // 2, SCREEN_HEIGHT // 2 - text.get_height() // 2),
         )
 
-    def draw_game_over(self, screen, winner, board_rect, overlay_alpha):
+    def draw_game_over(self, screen, winner, board_rect, overlay_alpha, message_color):
         if overlay_alpha > 0:
             overlay = pygame.Surface((board_rect.width, board_rect.height), pygame.SRCALPHA)
             overlay.fill((0, 0, 0, overlay_alpha))
             screen.blit(overlay, (board_rect.x, board_rect.y))
 
-        text = self.ui_font.render(f"{winner} wins", True, (0, 0, 0))
+        text = self.ui_font.render(f"{winner} wins", True, message_color)
         x = board_rect.centerx - text.get_width() // 2
         y = board_rect.y - text.get_height() - 8
         screen.blit(text, (x, y))

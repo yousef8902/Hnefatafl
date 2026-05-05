@@ -306,6 +306,11 @@ def main():
 
             if state == "gameover":
                 winner = "Defender" if controller.status == "defender_wins" else "Attacker"
+                human_won = (
+                    (controller.status == "defender_wins" and human_side == "defender")
+                    or (controller.status == "attacker_wins" and human_side == "attacker")
+                )
+                message_color = (30, 140, 60) if human_won else (170, 40, 40)
                 board_rect = pygame.Rect(BOARD_ORIGIN[0], BOARD_ORIGIN[1], BOARD_PIXELS, BOARD_PIXELS)
                 if gameover_start is None:
                     gameover_start = time.time()
@@ -317,7 +322,7 @@ def main():
                 else:
                     fade_t = min(1.0, (elapsed - fade_delay) / fade_duration)
                     overlay_alpha = int(110 * (1.0 - fade_t))
-                renderer.draw_game_over(screen, winner, board_rect, overlay_alpha)
+                renderer.draw_game_over(screen, winner, board_rect, overlay_alpha, message_color)
 
         pygame.display.flip()
         clock.tick(60)
